@@ -3,8 +3,8 @@
   "trailingSlash": false,
   "headers": [
     {
-      "source": "/api/voice.xml",
-      "headers": [{"key": "Content-Type", "value": "text/xml"}]
+      "source": "/voice.xml",
+      "headers": [{"key": "Content-Type", "value": "text/xml; charset=utf-8"}]
     }
   ]
 }
