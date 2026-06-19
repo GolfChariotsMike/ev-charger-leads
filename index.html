@@ -764,12 +764,29 @@ function toggleFaq(btn) {
 function submitForm(e, formId) {
   e.preventDefault();
   const form = e.target;
-  const successEl = document.getElementById(formId.replace('-form','-success').replace('hero-form','hero-success').replace('contact-form','contact-success'));
-  // In production, send to your CRM/webhook here
-  // fetch('/api/lead', { method:'POST', body: new FormData(form) });
-  form.querySelectorAll('input,select,button[type=submit]').forEach(el => el.disabled = true);
-  const successId = formId === 'hero-form' ? 'hero-success' : 'contact-success';
-  document.getElementById(successId).style.display = 'block';
+  const btn = form.querySelector('button[type=submit]');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  const data = Object.fromEntries(new FormData(form).entries());
+  data.state = window._detectedState || 'WA';
+
+  fetch('https://zvldadzbihxjzhyzuzei.supabase.co/functions/v1/ev-lead', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  .then(function(r) { return r.json(); })
+  .then(function() {
+    form.querySelectorAll('input,select,button[type=submit]').forEach(function(el) { el.disabled = true; });
+    const successId = formId === 'hero-form' ? 'hero-success' : 'contact-success';
+    document.getElementById(successId).style.display = 'block';
+  })
+  .catch(function() {
+    btn.disabled = false;
+    btn.textContent = 'Get My Free Quote →';
+    alert('Something went wrong. Please call us directly.');
+  });
 }
 </script>
 
@@ -884,10 +901,11 @@ function detectState() {
         'Northern Territory':'QLD','Tasmania':'VIC'
       };
       var state = regionMap[d.region] || 'WA';
+      window._detectedState = state;
       renderSuburbs(state);
       updatePhoneNumbers(state);
     })
-    .catch(function(){ renderSuburbs('WA'); updatePhoneNumbers('WA'); });
+    .catch(function(){ renderSuburbs('WA'); updatePhoneNumbers('WA'); window._detectedState='WA'; });
 }
 
 document.addEventListener('DOMContentLoaded', detectState);
