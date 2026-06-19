@@ -3,11 +3,8 @@
   "trailingSlash": false,
   "headers": [
     {
-      "source": "/voice.xml",
+      "source": "/twiml",
       "headers": [{"key": "Content-Type", "value": "text/xml; charset=utf-8"}]
     }
-  ],
-  "rewrites": [
-    { "source": "/voice.xml", "destination": "/voice.xml" }
   ]
 }
