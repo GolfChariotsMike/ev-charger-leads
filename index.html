@@ -21,7 +21,7 @@
     "name": "EV Charger Australia",
     "description": "Professional EV charger installation services across Australia",
     "url": "https://evchargerpro.com.au",
-    "telephone": "1800000001",
+    "telephone": "(08) 6017 2504",
     "areaServed": ["Perth", "Melbourne", "Sydney", "Brisbane", "Adelaide"],
     "serviceType": "EV Charger Installation",
     "hasOfferCatalog": {
@@ -356,7 +356,7 @@
     <a href="#faq">FAQ</a>
     <a href="#contact">Get a Quote</a>
   </div>
-  <a href="tel:1800000001" class="nav-phone">📞 1800 000 001</a>
+  <a href="tel:+61860172504" class="nav-phone" data-phone>📞 (08) 6017 2504</a>
 </nav>
 
 <!-- HERO -->
@@ -366,8 +366,8 @@
       <div class="hero-content">
         <h1>Home EV Charger Installation — <span>Fast, Licensed & Affordable</span></h1>
         <p>Get a certified electrician to install your EV charger. Serving Perth, Melbourne, Sydney, Brisbane &amp; Adelaide. Same-week availability in most areas.</p>
-        <a href="tel:1800000001" class="phone-btn">
-          <span class="phone-icon">📞</span> 1800 000 001
+        <a href="tel:+61860172504" class="phone-btn" data-phone-btn>
+          <span class="phone-icon">📞</span> <span data-phone-num>(08) 6017 2504</span>
         </a>
         <div class="trust-badges">
           <div class="badge"><span class="badge-icon">✓</span> Licensed Electricians</div>
@@ -424,7 +424,7 @@
       <div class="step">
         <div class="step-num">1</div>
         <h3>Call or Submit a Quote</h3>
-        <p>Call us on 1800 000 001 or fill in the quick form above. We'll ask a few simple questions about your home and EV.</p>
+        <p>Call us on <span data-phone-inline>(08) 6017 2504</span> or fill in the quick form above. We'll ask a few simple questions about your home and EV.</p>
       </div>
       <div class="step">
         <div class="step-num">2</div>
@@ -663,7 +663,7 @@
           <span class="contact-detail-icon">📞</span>
           <div class="contact-detail-text">
             <strong>Call Us Free</strong>
-            <span><a href="tel:1800000001" style="color:rgba(255,255,255,0.65)">1800 000 001</a></span>
+            <span><a href="tel:+61860172504" style="color:rgba(255,255,255,0.65)" data-phone>(08) 6017 2504</a></span>
           </div>
         </div>
         <div class="contact-detail">
@@ -824,6 +824,39 @@ var SUBURBS = {
 };
 
 var STATE_LABELS = {WA:'Western Australia',VIC:'Victoria',NSW:'New South Wales',QLD:'Queensland',SA:'South Australia'};
+var STATE_PHONES = {
+  WA:  {display:'(08) 6017 2504', href:'tel:+61860172504'},
+  VIC: {display:'(03) 4328 2691', href:'tel:+61343282691'},
+  NSW: {display:'(02) 5301 4061', href:'tel:+61253014061'},
+  QLD: {display:'(07) 4520 7085', href:'tel:+61745207085'},
+  SA:  {display:'(08) 6835 7004', href:'tel:+61868357004'}
+};
+
+function updatePhoneNumbers(state) {
+  var p = STATE_PHONES[state] || STATE_PHONES.WA;
+  // Update all phone links and display text
+  document.querySelectorAll('[data-phone]').forEach(function(el) {
+    el.href = p.href;
+    el.textContent = '\uD83D\uDCDE ' + p.display;
+  });
+  document.querySelectorAll('[data-phone-btn]').forEach(function(el) {
+    el.href = p.href;
+    var num = el.querySelector('[data-phone-num]');
+    if (num) num.textContent = p.display;
+  });
+  document.querySelectorAll('[data-phone-inline]').forEach(function(el) {
+    el.textContent = p.display;
+  });
+  // Update schema telephone
+  var schema = document.querySelector('script[type="application/ld+json"]');
+  if (schema) {
+    try {
+      var s = JSON.parse(schema.textContent);
+      s.telephone = p.display;
+      schema.textContent = JSON.stringify(s);
+    } catch(e) {}
+  }
+}
 
 function renderSuburbs(state) {
   var section = document.getElementById('local-suburbs-section');
@@ -852,8 +885,9 @@ function detectState() {
       };
       var state = regionMap[d.region] || 'WA';
       renderSuburbs(state);
+      updatePhoneNumbers(state);
     })
-    .catch(function(){ renderSuburbs('WA'); });
+    .catch(function(){ renderSuburbs('WA'); updatePhoneNumbers('WA'); });
 }
 
 document.addEventListener('DOMContentLoaded', detectState);

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+  <Say voice="Polly.Nicole">
+    Thank you for calling EV Charger Pro. We are matching you with a licensed installer in your area.
+    Please leave your name, phone number, and suburb after the tone and we will call you back within the hour.
+  </Say>
+  <Record
+    maxLength="120"
+    playBeep="true"
+    transcribe="true"
+  />
+  <Say voice="Polly.Nicole">
+    Thank you. One of our local installers will be in touch with you shortly.
+  </Say>
+</Response>

@@ -1,4 +1,10 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/api/voice.xml",
+      "headers": [{"key": "Content-Type", "value": "text/xml"}]
+    }
+  ]
 }
